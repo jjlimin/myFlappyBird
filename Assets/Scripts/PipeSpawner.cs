@@ -3,7 +3,7 @@ using UnityEngine;
 public class PipeSpawner : MonoBehaviour
 {
     [SerializeField] private float _maxTime = 1.5f;
-    [SerializeField] private float _heightRange = 0.45f;
+    [SerializeField] private float _heightRange = 0.4f;
     [SerializeField] private GameObject _pipePrefab;
 
     private float _timer;
@@ -15,7 +15,7 @@ public class PipeSpawner : MonoBehaviour
 
     private void SpawnPipe()
     {
-        Vector3 spawnPosition = transform.position + new Vector3(0, Random.Range(-_heightRange, _heightRange));
+        Vector3 spawnPosition = transform.position + new Vector3(0, Random.Range(-_heightRange, _heightRange + 0.5f));
         GameObject _pipe = Instantiate(_pipePrefab, spawnPosition, Quaternion.identity);
         
         Destroy(_pipe, 4f);
