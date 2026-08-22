@@ -18,7 +18,7 @@ public class PipeSpawner : MonoBehaviour
         Vector3 spawnPosition = transform.position + new Vector3(0, Random.Range(-_heightRange, _heightRange));
         GameObject _pipe = Instantiate(_pipePrefab, spawnPosition, Quaternion.identity);
         
-        Destroy(_pipe, 10f);
+        Destroy(_pipe, 4f);
     }
 
     private void Update()
