@@ -1,3 +1,4 @@
+<img width="500" height="426" alt="giphy" src="https://github.com/user-attachments/assets/364fcad9-d68a-4e9b-ac01-7225e0028e86" />
 # Flappy Bird Clone (Unity)
 
 A 2D Flappy Bird clone built as a course assignment for **Game Development with Unity**. The project focuses on core 2D gameplay mechanics, state-driven game loops, parallax background rendering, and dynamic physics-based controls.
