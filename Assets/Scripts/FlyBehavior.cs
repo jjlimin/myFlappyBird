@@ -49,6 +49,7 @@ public class FlyBehavior : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         _audioSource.PlayOneShot(_collisionClip);
+        CameraShake.instance.Shake();
         GameManager.instance.GameOver();
     }
 }
