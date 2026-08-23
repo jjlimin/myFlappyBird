@@ -5,13 +5,17 @@ public class FlyBehavior : MonoBehaviour
 {
     [SerializeField] private float _velocity = 1.5f;
     [SerializeField] private float _rotationSpeed = 10f;
-
+    [SerializeField] private AudioClip _flapClip;
+    [SerializeField] private AudioClip _collisionClip;
+    
     private Rigidbody2D _rb;
     private float _startingGravityScale;
-
+    private AudioSource _audioSource;
+    
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _audioSource = GetComponent<AudioSource>();
         _startingGravityScale = _rb.gravityScale;
         _rb.gravityScale = 0f;
     }
@@ -31,6 +35,7 @@ public class FlyBehavior : MonoBehaviour
             }
 
             _rb.linearVelocity = Vector2.up * _velocity;
+            _audioSource.PlayOneShot(_flapClip);
         }
     }
 
@@ -41,6 +46,7 @@ public class FlyBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        _audioSource.PlayOneShot(_collisionClip);
         GameManager.instance.GameOver();
     }
 }
