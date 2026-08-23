@@ -22,13 +22,15 @@ public class FlyBehavior : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.State == GameState.GameOver) return;
+        
         bool pressedThisFrame =
             (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame) ||
             (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame);
 
         if (pressedThisFrame)
         {
-            if (!GameManager.instance.HasGameStarted)
+            if (GameManager.instance.State == GameState.NotStarted)
             {
                 GameManager.instance.StartGame();
                 _rb.gravityScale = _startingGravityScale;

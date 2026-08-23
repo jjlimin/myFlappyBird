@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState { NotStarted, Playing, GameOver }
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
-    public bool HasGameStarted { get; private set; }
+    public GameState State { get; private set; } = GameState.NotStarted;
 
     [SerializeField] private GameObject _gameOverCanvas;
     [SerializeField] private GameObject _startScreenCanvas;
@@ -24,9 +25,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        if (HasGameStarted) return;
+        if (State != GameState.NotStarted) return;
 
-        HasGameStarted = true;
+        State = GameState.Playing;
         _startScreenCanvas.SetActive(false);
         _scoreCanvas.SetActive(true);
         _pipeSpawner.StartSpawning();
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        State = GameState.GameOver;
         _gameOverCanvas.SetActive(true);
         Time.timeScale = 0f;
     }
