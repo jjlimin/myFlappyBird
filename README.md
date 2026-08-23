@@ -29,7 +29,7 @@ The core gameplay flow is managed by a centralized state machine via `GameManage
 * **`Playing`**  
   The first flap input triggers `GameManager.StartGame()`, which transitions UI canvases, displays the active score counter, enables bird gravity, and starts the pipe spawner.
 * **`GameOver`**  
-  Triggered when the bird collides with obstacles or the ground. The game reveals the Game Over screen, freezes time (`Time.timeScale = 0`), and locks player input and audio triggers. Pressing restart reloads the active scene.
+  Triggered when the bird collides with obstacles or the ground. The game triggers a brief camera shake, reveals the Game Over screen, freezes time (`Time.timeScale = 0`), and locks player input and audio triggers. Pressing restart reloads the active scene.
 
 ---
 
@@ -45,6 +45,7 @@ The core gameplay flow is managed by a centralized state machine via `GameManage
 | `Score.cs` | Score Canvas | Singleton managing real-time score display with TextMeshPro and persisting high scores across sessions using `PlayerPrefs`. |
 | `Paralax.cs` | Background / Ground | Shifts `MeshRenderer.material.mainTextureOffset` over time to achieve an infinite, seam-free scrolling effect independent of screen width or game state. |
 | `LogoFloat.cs` | Start UI Logo | Creates a smooth vertical floating animation using a sine wave on the UI `RectTransform.anchoredPosition`. |
+| `CameraShake.cs` | Main Camera | Singleton that briefly offsets the camera's local position by random jitter (`_magnitude`) over `_duration`, using unscaled time so it still plays through the `Time.timeScale = 0` freeze on death. Triggered from `FlyBehavior` on collision. |
 
 ---
 
@@ -63,3 +64,4 @@ The core gameplay flow is managed by a centralized state machine via `GameManage
 - [x] Procedural pipe spawning with randomized height offsets and auto-cleanup
 - [x] Real-time score tracking and persistent high-score saving via `PlayerPrefs`
 - [x] Sound effects and animated UI elements (sine-wave logo floating)
+- [x] Camera shake on collision/death
