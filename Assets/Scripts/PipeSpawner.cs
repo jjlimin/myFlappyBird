@@ -8,7 +8,7 @@ public class PipeSpawner : MonoBehaviour
     [SerializeField] private float _pipeLifetime = 4f;
     [SerializeField] private GameObject _pipePrefab;
 
-    private void Start()
+    public void StartSpawning()
     {
         InvokeRepeating(nameof(SpawnPipe), 0f, _spawnInterval);
     }
