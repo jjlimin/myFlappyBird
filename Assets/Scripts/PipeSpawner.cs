@@ -2,32 +2,22 @@ using UnityEngine;
 
 public class PipeSpawner : MonoBehaviour
 {
-    [SerializeField] private float _maxTime = 1.5f;
-    [SerializeField] private float _heightRange = 0.4f;
+    [SerializeField] private float _spawnInterval = 1.5f;
+    [SerializeField] private float _minHeightOffset = -0.4f;
+    [SerializeField] private float _maxHeightOffset = 0.9f;
+    [SerializeField] private float _pipeLifetime = 4f;
     [SerializeField] private GameObject _pipePrefab;
 
-    private float _timer;
-    
-    private void  Start()
+    private void Start()
     {
-        SpawnPipe();
+        InvokeRepeating(nameof(SpawnPipe), 0f, _spawnInterval);
     }
 
     private void SpawnPipe()
     {
-        Vector3 spawnPosition = transform.position + new Vector3(0, Random.Range(-_heightRange, _heightRange + 0.5f));
-        GameObject _pipe = Instantiate(_pipePrefab, spawnPosition, Quaternion.identity);
-        
-        Destroy(_pipe, 4f);
-    }
+        Vector3 spawnPosition = transform.position + new Vector3(0, Random.Range(_minHeightOffset, _maxHeightOffset));
+        GameObject pipe = Instantiate(_pipePrefab, spawnPosition, Quaternion.identity);
 
-    private void Update()
-    {
-        if (_timer > _maxTime)
-        {
-            SpawnPipe();
-            _timer = 0;
-        }
-        _timer += Time.deltaTime;
+        Destroy(pipe, _pipeLifetime);
     }
 }
