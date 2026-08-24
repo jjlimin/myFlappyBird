@@ -8,15 +8,18 @@ public class Score : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI _currentScoreText;
     [SerializeField] private TextMeshProUGUI _highScoreText;
-
+    [SerializeField] private AudioClip _scoreClip;
+    
     private int _score;
-
+    private AudioSource _audioSource;
+    
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -39,6 +42,7 @@ public class Score : MonoBehaviour
     {
         _score++;
         _currentScoreText.text = _score.ToString();
+        _audioSource.PlayOneShot(_scoreClip);
         UpdateHighScore();
     }
 }
