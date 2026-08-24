@@ -39,10 +39,10 @@ The core gameplay flow is managed by a centralized state machine via `GameManage
 |---|---|---|
 | `FlyBehavior.cs` | Bird | Handles player input, applies upward impulse, tilts the sprite relative to vertical velocity, and triggers flap/collision audio. Alerts `GameManager` on collision and disables input post-game. |
 | `GameManager.cs` | GameManager | Singleton controller managing `GameState`. Coordinates UI canvas transitions, triggers spawning routines, freezes time on death, and handles scene reloads. |
-| `PipeSpawner.cs` | Spawner | Spawns pipe obstacles at randomized vertical offsets between `_minHeightOffset` and `_maxHeightOffset`. Spawning begins on game start, and instantiated pipes self-destruct after `_pipeLifetime`. |
-| `MovePipe.cs` | Pipe Prefab | Translates spawned pipe obstacles horizontally to the left at a constant speed. |
+| `PipeSpawner.cs` | Spawner | Spawns pipe obstacles at randomized vertical offsets between `_minHeightOffset` and `_maxHeightOffset`. Spawning begins on game start; spawn X is recalculated every spawn from the camera's right edge (`orthographicSize * aspect` + `_spawnMargin`), so it stays correct across any aspect ratio. |
+| `MovePipe.cs` | Pipe Prefab | Translates spawned pipe obstacles horizontally to the left at a constant speed, then self-destroys once it passes the camera's left edge (`_destroyMargin`). |
 | `PipeIncreaseScore.cs` | Pipe Score Trigger | Trigger collider attached to pipe gaps. Detects the `Player` tag and updates the score counter. |
-| `Score.cs` | Score Canvas | Singleton managing real-time score display with TextMeshPro and persisting high scores across sessions using `PlayerPrefs`. |
+| `Score.cs` | Score Canvas | Singleton managing real-time score display with TextMeshPro, persisting high scores via `PlayerPrefs`, and playing a score sound (`_scoreClip`) through its own `AudioSource`. |
 | `Paralax.cs` | Background / Ground | Shifts `MeshRenderer.material.mainTextureOffset` over time to achieve an infinite, seam-free scrolling effect independent of screen width or game state. |
 | `LogoFloat.cs` | Start UI Logo | Creates a smooth vertical floating animation using a sine wave on the UI `RectTransform.anchoredPosition`. |
 | `CameraShake.cs` | Main Camera | Singleton that briefly offsets the camera's local position by random jitter (`_magnitude`) over `_duration`, using unscaled time so it still plays through the `Time.timeScale = 0` freeze on death. Triggered from `FlyBehavior` on collision. |
@@ -51,8 +51,8 @@ The core gameplay flow is managed by a centralized state machine via `GameManage
 
 ## Scene Setup & Audio
 
-* **Scene:** `Assets/Scenes/SampleScene.unity` contains the main environment, physical boundaries, and three dedicated UI canvases (Start Screen, Score Overlay, and Game Over) swapped at runtime by `GameManager`.
-* **Audio:** Managed through the bird's `AudioSource`, providing distinct sound feedback for flaps and obstacle collisions. Input guards ensure audio triggers halt immediately upon death.
+* **Scene:** `Assets/Scenes/SampleScene.unity` contains the main environment, physical boundaries (ground + an invisible `Ceiling` collider preventing players from flying over pipes), and three dedicated UI canvases (Start Screen, Score Overlay, and Game Over) swapped at runtime by `GameManager`.
+* **Audio:** The bird's `AudioSource` handles flap/collision sounds; `Score` has its own `AudioSource` for the scoring sound. Input guards ensure the bird's audio triggers halt immediately upon death.
 
 ---
 
@@ -65,3 +65,5 @@ The core gameplay flow is managed by a centralized state machine via `GameManage
 - [x] Real-time score tracking and persistent high-score saving via `PlayerPrefs`
 - [x] Sound effects and animated UI elements (sine-wave logo floating)
 - [x] Camera shake on collision/death
+- [x] Camera-relative pipe spawn/despawn, correct across all aspect ratios
+- [x] Invisible ceiling boundary closing the fly-over-pipe skip exploit
